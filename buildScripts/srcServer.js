@@ -1,9 +1,18 @@
-var express = require('express'); //configure the web server that will serve up files in source directory
-var path = require('path'); // reference to path
-var open = require('open'); // open site in the browser
+import express from 'express'; //configure the web server that will serve up files in source directory
+import path from 'path'; // reference to path
+import open from 'open'; // open site in the browser
+import webpack from 'webpack';
+import config from '../webpack.config.dev';
 
-var port = 3000; // port to use (http://localhost:3000)
-var app = express(); // express is the web server package. Configures the web server.
+const port = 3000; // port to use (http://localhost:3000)
+const app = express(); // express is the web server package. Configures the web server.
+const compiler = webpack(config); // ref to webpack compiler
+
+
+app.use(require('webpack-dev-middleware')(compiler, {
+  noInfo: true, // dont display any special info
+  publicPath: config.output.publicPath // configure public path
+}));
 
 // tell express which routes to handle.
 // anything requested from the root will use this function
